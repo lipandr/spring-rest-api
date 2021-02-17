@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -25,11 +27,11 @@ public class UserService {
     }
 
     public User getOne(Long id) throws UserNotFoundException {
-        UserEntity user = userRepo.findById(id).get();
-        if (user == null) {
+        Optional<UserEntity> user = userRepo.findById(id);
+        if (user.isEmpty()) {
             throw new UserNotFoundException("Пользователь не найден");
         }
-        return User.toModel(user);
+        return User.toModel(user.get());
     }
 
     public Long deleteUser(Long id) {
